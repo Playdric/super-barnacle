@@ -1,0 +1,1 @@
+`g++ -Xpreprocessor -fopenmp -lomp -o program main.cpp EasyBMP.cpp && ./program`
