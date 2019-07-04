@@ -42,8 +42,7 @@ int main(int argc, char const *argv[]) {
             bmpToNeg(w, h)->Blue = negB;
         }
     }
-
-    #pragma parallel
+ 
     Rescale(bmpToRescale, 'p', atoi(argv[1]));
 
     end = omp_get_wtime();
