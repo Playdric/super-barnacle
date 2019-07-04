@@ -9,8 +9,8 @@ int main(int argc, char const *argv[]) {
     BMP bmpToNeg;
     BMP bmpToRescale;
     BMP bmpRescaled;
-    int width, nWidth;
-    int height, nHeight;
+    int width, w;
+    int height, h;
     int R, G, B;
     int negR, negG, negB;
     int grey;
@@ -24,8 +24,9 @@ int main(int argc, char const *argv[]) {
 
     printf("w=%d,h=%d\n", width, height);
     start = omp_get_wtime();
-    for (int w = 0; w < width; w++) {
-        for (int h = 0; h < height; h++) {
+    #pragma omp parallel for private(h, R, G, B, negR, negG, negB, grey)
+    for (w = 0; w < width; w++) {
+        for (h = 0; h < height; h++) {
             R = bmpToGrey(w, h)->Red;
             G = bmpToGrey(w, h)->Green;
             B = bmpToGrey(w, h)->Blue;
@@ -42,12 +43,8 @@ int main(int argc, char const *argv[]) {
         }
     }
 
-    nWidth = width * 30 / 100;
-    nHeight = height * 30 / 100;
-
-    bmpRescaled.SetSize(nWidth, nHeight);
-
-    
+    #pragma parallel
+    Rescale(bmpToRescale, 'p', atoi(argv[1]));
 
     end = omp_get_wtime();
 
