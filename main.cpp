@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <zconf.h>
+#include <iostream>
 #include <omp.h>
 #include "EasyBMP.h"
+using namespace std;
 
 int main(int argc, char const *argv[]) {
     BMP bmpToGrey;
@@ -16,9 +18,13 @@ int main(int argc, char const *argv[]) {
     int grey;
     double start, end;
 
-    bmpToGrey.ReadFromFile("MARBLES.BMP");
-    bmpToNeg.ReadFromFile("MARBLES.BMP");
-    bmpToRescale.ReadFromFile("MARBLES.BMP");
+    //omp_set_num_threads(4);
+    //cout << "Nombre de threads : " << omp_get_num_threads() << endl;
+
+    if (argc == 1) { return 0;}
+    bmpToGrey.ReadFromFile(argv[1]);
+    bmpToNeg.ReadFromFile(argv[1]);
+    bmpToRescale.ReadFromFile(argv[1]);
     width = bmpToGrey.TellWidth();
     height = bmpToGrey.TellHeight();
 
@@ -43,7 +49,9 @@ int main(int argc, char const *argv[]) {
         }
     }
  
-    Rescale(bmpToRescale, 'p', atoi(argv[1]));
+    if (argc > 2) {
+        Rescale(bmpToRescale, 'p', atoi(argv[2]));
+    }
 
     end = omp_get_wtime();
 
